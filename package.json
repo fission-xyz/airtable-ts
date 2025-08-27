@@ -1,18 +1,16 @@
 {
   "name": "airtable-ts",
   "version": "1.6.0",
+  "type": "module",
   "description": "A type-safe Airtable SDK",
   "license": "MIT",
-  "author": "Adam Jones (domdomegg)",
+  "author": "Adam Jones (domdomegg) & Curtis Humphrey PhD (CurtisHumphrey)",
   "repository": {
     "type": "git",
     "url": "https://github.com/domdomegg/airtable-ts.git"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest --watch",
