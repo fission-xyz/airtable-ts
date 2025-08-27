@@ -8,8 +8,10 @@ type NonNullToString<T> =
 			T extends boolean ? 'boolean' :
 				T extends number[] ? 'number[]' :
 					T extends string[] ? 'string[]' :
-						T extends boolean[] ? 'boolean[]' :
-							never;
+						T extends (string | null)[] ? '(string | null)[]' :
+							T extends boolean[] ? 'boolean[]' :
+								T extends (boolean | null)[] ? '(boolean | null)[]' :
+									never;
 
 export type ToTsTypeString<T> =
   null extends T ? `${NonNullToString<T>} | null` : NonNullToString<T>;
@@ -23,11 +25,15 @@ export type FromTsTypeString<T> =
 						T extends 'boolean | null' ? boolean | null :
 							T extends 'string[]' ? string[] :
 								T extends 'string[] | null' ? string[] | null :
-									T extends 'number[]' ? number[] :
-										T extends 'number[] | null' ? number[] | null :
-											T extends 'boolean[]' ? boolean[] :
-												T extends 'boolean[] | null' ? boolean[] | null :
-													never;
+									T extends '(string | null)[]' ? (string | null)[] :
+										T extends '(string | null)[] | null' ? (string | null)[] | null :
+											T extends 'number[]' ? number[] :
+												T extends 'number[] | null' ? number[] | null :
+													T extends 'boolean[]' ? boolean[] :
+														T extends 'boolean[] | null' ? boolean[] | null :
+															T extends '(boolean | null)[]' ? (boolean | null)[] :
+																T extends '(boolean | null)[] | null' ? (boolean | null)[] | null :
+																	never;
 
 export type AirtableTypeString =
 	| 'aiText'
