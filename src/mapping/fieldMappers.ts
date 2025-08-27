@@ -392,6 +392,24 @@ const stringArrayOrNull: Mapper = {
 	},
 };
 
+const stringNullableArrayOrNull: Mapper = {
+	'(string | null)[] | null': {
+		multipleLookupValues: {
+			toAirtable() {
+				throw new AirtableTsError({
+					message: 'Lookup fields are read-only and cannot be modified.',
+					type: ErrorType.SCHEMA_VALIDATION,
+				});
+			},
+			fromAirtable: coerce('multipleLookupValues', '(string | null)[] | null'),
+		},
+		unknown: {
+			toAirtable: (value) => value,
+			fromAirtable: coerce('unknown', '(string | null)[] | null'),
+		},
+	},
+};
+
 const booleanNullableArrayOrNull: Mapper = {
 	'(boolean | null)[] | null': {
 		multipleLookupValues: {
@@ -466,6 +484,16 @@ export const fieldMappers: Mapper = {
 	...stringArrayOrNull,
 	'string[]': {
 		...Object.fromEntries(Object.entries(stringArrayOrNull['string[] | null']!).map(([airtableType, nullablePair]) => {
+			return [airtableType, {
+				toAirtable: nullablePair.toAirtable,
+				fromAirtable: (value: null) => nullablePair.fromAirtable(value) ?? [],
+			}];
+		})),
+	},
+
+		...stringNullableArrayOrNull,
+	'(string | null)[]': {
+		...Object.fromEntries(Object.entries(stringNullableArrayOrNull['(string | null)[] | null']!).map(([airtableType, nullablePair]) => {
 			return [airtableType, {
 				toAirtable: nullablePair.toAirtable,
 				fromAirtable: (value: null) => nullablePair.fromAirtable(value) ?? [],
