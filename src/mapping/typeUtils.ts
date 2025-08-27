@@ -129,14 +129,34 @@ type TypeDef = {
 	single: 'string' | 'number' | 'boolean';
 	array: boolean;
 	nullable: boolean;
+	arrayElementNullable: boolean;
 };
 
 export const parseType = (t: TsTypeString): TypeDef => {
+	if (t.endsWith(' | null)[] | null')) {
+		return {
+			single: t.slice(1, -(' | null)[] | null'.length)) as TypeDef['single'],
+			array: true,
+			nullable: true,
+			arrayElementNullable: true,
+		};
+	}
+
 	if (t.endsWith('[] | null')) {
 		return {
 			single: t.slice(0, -('[] | null'.length)) as TypeDef['single'],
 			array: true,
 			nullable: true,
+			arrayElementNullable: false,
+		};
+	}
+
+	if (t.endsWith(' | null)[]')) {
+		return {
+			single: t.slice(1, -(' | null)[]'.length)) as TypeDef['single'],
+			array: true,
+			nullable: false,
+			arrayElementNullable: true,
 		};
 	}
 
@@ -145,6 +165,7 @@ export const parseType = (t: TsTypeString): TypeDef => {
 			single: t.slice(0, -('[]'.length)) as TypeDef['single'],
 			array: true,
 			nullable: false,
+			arrayElementNullable: false,
 		};
 	}
 
@@ -153,6 +174,7 @@ export const parseType = (t: TsTypeString): TypeDef => {
 			single: t.slice(0, -(' | null'.length)) as TypeDef['single'],
 			array: false,
 			nullable: true,
+			arrayElementNullable: false,
 		};
 	}
 
@@ -160,6 +182,7 @@ export const parseType = (t: TsTypeString): TypeDef => {
 		single: t as TypeDef['single'],
 		array: false,
 		nullable: false,
+		arrayElementNullable: false,
 	};
 };
 

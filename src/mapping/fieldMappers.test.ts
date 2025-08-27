@@ -222,6 +222,23 @@ describe('string[]', () => {
 	});
 });
 
+describe('(boolean | null)[]', () => {
+	test('multipleLookupValues', () => {
+		const mapperPair = fieldMappers['(boolean | null)[]']?.multipleLookupValues;
+		if (!mapperPair) {
+			throw new Error('Expected mapper pair for [(boolean | null)[], multipleLookupValues]');
+		}
+
+		expect(mapperPair.fromAirtable([true, false, null])).toEqual([true, false, null]);
+		expect(mapperPair.fromAirtable(null)).toEqual([]);
+		expect(mapperPair.fromAirtable(undefined)).toEqual([]);
+		expect(mapperPair.fromAirtable([])).toEqual([]);
+		expect(() => mapperPair.fromAirtable([1, 2, 3])).toThrow();
+
+		expect(() => mapperPair.toAirtable([true, false])).toThrow('read-only');
+	});
+});
+
 describe('unknown', () => {
 	test.each([
 		['string', 'example'],
