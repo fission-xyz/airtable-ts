@@ -235,7 +235,23 @@ describe('(boolean | null)[]', () => {
 		expect(mapperPair.fromAirtable([])).toEqual([]);
 		expect(() => mapperPair.fromAirtable([1, 2, 3])).toThrow();
 
-		expect(() => mapperPair.toAirtable([true, false])).toThrow('read-only');
+		expect(() => mapperPair.toAirtable([true, false, null])).toThrow('read-only');
+	});
+});
+describe('(string | null)[]', () => {
+	test('multipleLookupValues', () => {
+		const mapperPair = fieldMappers['(string | null)[]']?.multipleLookupValues;
+		if (!mapperPair) {
+			throw new Error('Expected mapper pair for [(string | null)[], multipleLookupValues]');
+		}
+
+		expect(mapperPair.fromAirtable(['test', 'second', null])).toEqual(['test', 'second', null]);
+		expect(mapperPair.fromAirtable(null)).toEqual([]);
+		expect(mapperPair.fromAirtable(undefined)).toEqual([]);
+		expect(mapperPair.fromAirtable([])).toEqual([]);
+		expect(() => mapperPair.fromAirtable([1, 2, 3])).toThrow();
+
+		expect(() => mapperPair.toAirtable(['test', 'second', null])).toThrow('read-only');
 	});
 });
 
