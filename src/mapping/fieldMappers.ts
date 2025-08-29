@@ -244,6 +244,15 @@ const booleanOrNull: Mapper = {
 			toAirtable: readonly('multipleLookupValues'),
 			fromAirtable: coerce('multipleLookupValues', 'boolean | null'),
 		},
+		formula: {
+			toAirtable() {
+				throw new AirtableTsError({
+					message: 'Formula fields are read-only and cannot be modified.',
+					type: ErrorType.SCHEMA_VALIDATION,
+				});
+			},
+			fromAirtable: coerce('multipleLookupValues', 'boolean | null'),
+		},
 		unknown: {
 			toAirtable: (value) => value,
 			fromAirtable: coerce('unknown', 'boolean | null'),
